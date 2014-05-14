@@ -1,4 +1,4 @@
-/* Zepto v1.1.2-5-gb98b278 - zepto event ajax form ie deferred callbacks touch gesture detect selector - zeptojs.com/license */
+/* Zepto v1.1.2-6-g3f1478c - zepto event ajax form ie deferred callbacks touch detect gesture selector - zeptojs.com/license */
 
 
 var Zepto = (function() {
@@ -1944,38 +1944,6 @@ window.$ === undefined && (window.$ = Zepto)
 })(Zepto)
 
 ;(function($){
-  if ($.os.ios) {
-    var gesture = {}, gestureTimeout
-
-    function parentIfText(node){
-      return 'tagName' in node ? node : node.parentNode
-    }
-
-    $(document).bind('gesturestart', function(e){
-      var now = Date.now(), delta = now - (gesture.last || now)
-      gesture.target = parentIfText(e.target)
-      gestureTimeout && clearTimeout(gestureTimeout)
-      gesture.e1 = e.scale
-      gesture.last = now
-    }).bind('gesturechange', function(e){
-      gesture.e2 = e.scale
-    }).bind('gestureend', function(e){
-      if (gesture.e2 > 0) {
-        Math.abs(gesture.e1 - gesture.e2) != 0 && $(gesture.target).trigger('pinch') &&
-          $(gesture.target).trigger('pinch' + (gesture.e1 - gesture.e2 > 0 ? 'In' : 'Out'))
-        gesture.e1 = gesture.e2 = gesture.last = 0
-      } else if ('last' in gesture) {
-        gesture = {}
-      }
-    })
-
-    ;['pinch', 'pinchIn', 'pinchOut'].forEach(function(m){
-      $.fn[m] = function(callback){ return this.bind(m, callback) }
-    })
-  }
-})(Zepto)
-
-;(function($){
   function detect(ua){
     var os = this.os = {}, browser = this.browser = {},
       webkit = ua.match(/Web[kK]it[\/]{0,1}([\d.]+)/),
@@ -2037,6 +2005,38 @@ window.$ === undefined && (window.$ = Zepto)
   // make available to unit tests
   $.__detect = detect
 
+})(Zepto)
+
+;(function($){
+  if ($.os.ios) {
+    var gesture = {}, gestureTimeout
+
+    function parentIfText(node){
+      return 'tagName' in node ? node : node.parentNode
+    }
+
+    $(document).bind('gesturestart', function(e){
+      var now = Date.now(), delta = now - (gesture.last || now)
+      gesture.target = parentIfText(e.target)
+      gestureTimeout && clearTimeout(gestureTimeout)
+      gesture.e1 = e.scale
+      gesture.last = now
+    }).bind('gesturechange', function(e){
+      gesture.e2 = e.scale
+    }).bind('gestureend', function(e){
+      if (gesture.e2 > 0) {
+        Math.abs(gesture.e1 - gesture.e2) != 0 && $(gesture.target).trigger('pinch') &&
+          $(gesture.target).trigger('pinch' + (gesture.e1 - gesture.e2 > 0 ? 'In' : 'Out'))
+        gesture.e1 = gesture.e2 = gesture.last = 0
+      } else if ('last' in gesture) {
+        gesture = {}
+      }
+    })
+
+    ;['pinch', 'pinchIn', 'pinchOut'].forEach(function(m){
+      $.fn[m] = function(callback){ return this.bind(m, callback) }
+    })
+  }
 })(Zepto)
 
 ;(function($){
